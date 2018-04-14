@@ -1,4 +1,0 @@
-{
-    "git.ignoreLimitWarning": true,
-    "python.pythonPath": "${workspaceFolder}\\shorten_venv\\Scripts\\python.exe"
-}
