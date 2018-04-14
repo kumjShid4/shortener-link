@@ -7,7 +7,7 @@ def code_generator(size=6, chars=string.ascii_lowercase + string.digits):
 def create_shortcode(instance, size=6):
     new_code = code_generator(size=size)
     URLclass = instance.__class__
-    qs_exist = URLclass.objects.filter(new_code).exists()
+    qs_exist = URLclass.objects.filter(short_code=new_code).exists()
     if qs_exist:
         return create_shortcode(instance=instance)
     return new_code
