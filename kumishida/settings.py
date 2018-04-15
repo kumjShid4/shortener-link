@@ -25,7 +25,7 @@ SECRET_KEY = 'i^^h+y-(_$@l(+m21!lt(qi$x_=!za9!o*7n0wob*3lmmfqi!+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['kumishida.com', 'www.kumishida.com']
 
 
 # Application definition
@@ -39,11 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'shortener',
     #third-party
-    'bootstrap4',
+    'django_hosts',
+    'analytics',
 ]
 
 MIDDLEWARE = [
-    # 'django_hosts.middleware.HostsRequestMiddleware',
+    'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -51,10 +52,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'django_hosts.middleware.HostsRequestMiddleware',
+    'django_hosts.middleware.HostsRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'kumishida.urls'
+ROOT_HOSTCONF = 'kumishida.hosts'
+
+DEFAULT_HOST = 'www'
+DEFAULT_REDIRECT_URL = "http://www.kumishida.com:8000"
+PARENT_HOST = "kumishida.com:8000"
 
 TEMPLATES = [
     {
