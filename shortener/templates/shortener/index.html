@@ -58,9 +58,9 @@
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-10">
-                                <!-- <label class="sr-only" for="inputURL">URL</label>
-                                <input type="text" class="form-control" id="inputURL" placeholder="Your original URL here"> -->
-                                {{ form }}
+                                {% for field in form.visible_fields %}
+                                    {{ field }}
+                                {% endfor %}
                             </div>
                             <div class="col-2">
                                 <button type="submit" class="btn btn-outline-light">Shorten URL</button>
@@ -86,8 +86,8 @@
                         <tr>
                             <th scope="row"><a href="{{ url.url }}" target="_blank">{{ url.url|truncatechars:50 }}</a></th>
                             <td>{{ url.timestamp }}</td>
-                            <td>{{ url.short_code }}</td>
-                            <td>0</td>
+                            <td><a href="{{ url.get_short_url }}" target="_blank">{{ url.get_short_url }}</a></td>
+                            <td>{{ url.clickcount.count }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
