@@ -20,7 +20,6 @@ from shortener.views import redirect_url, index
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # url(r'', include('shortener.urls', namespace='shortener')),
     url(r'^$', index),
     url(r'^(?P<shortcode>[\w-]+)/$', redirect_url, name='redirect_url'),
 ]
