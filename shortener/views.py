@@ -5,7 +5,7 @@ from .models import URL
 from .utils import validate_url
 from analytics.models import ClickCount
 from django.core.exceptions import ValidationError
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 
@@ -25,11 +25,14 @@ def index(request):
                 obj.url = form.cleaned_data['url']
                 obj.save()
                 ClickCount.objects.create_event(obj)
-                return HttpResponseRedirect('/')
+                return redirect('/')
             else:
                 valid = False
     urls = URL.objects.all()
-    return render(request, 'shortener/index.html', {'urls': urls, 'form': form, 'valid': valid})
+    paginator = Paginator(urls, 10)
+    page = request.GET.get('page')
+    urls_display = paginator.get_page(page)
+    return render(request, 'shortener/index.html', {'urls': urls, 'form': form, 'valid': valid, 'urls_display': urls_display})
 
 
 def redirect_url(request, shortcode):
