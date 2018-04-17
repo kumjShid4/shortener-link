@@ -10,7 +10,6 @@ class URLManager(models.Manager):
         new_codes = 0
         for q in query_set:
             q.short_code = create_shortcode(q)
-            print(q.short_code)
             q.save()
             new_codes += 1
         return "New codes made: {i}".format(i=new_codes)
@@ -37,4 +36,3 @@ class URL(models.Model):
         url_path = reverse('redirect_url', kwargs={
                            'shortcode': self.short_code}, host='www', scheme='http')
         return url_path
-        # return "http://127.0.0.1:8000/{shortcode}".format(shortcode=self.short_code)
