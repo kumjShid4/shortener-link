@@ -2,23 +2,34 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from .forms import URLForm
 from .models import URL
+from .utils import validate_url
 from analytics.models import ClickCount
+from django.core.exceptions import ValidationError
 
 # Create your views here.
 
 
 def index(request):
+    valid = True
+    form = URLForm()
     if request.method == "POST":
-        form = URLForm(request.POST)
-        if form.is_valid():
-            url = form.save(commit=False)
-            url.save()
-            ClickCount.objects.create_event(url)
-            return redirect('shortener:index')
-    else:
-        form = URLForm()
+        try:
+            validate_url(request.POST['url'])
+        except ValidationError:
+            valid = False
+        else:
+            valid = True
+            form = URLForm(request.POST)
+            if form.is_valid():
+                obj = URL()
+                obj.url = form.cleaned_data['url']
+                obj.save()
+                ClickCount.objects.create_event(obj)
+                return HttpResponseRedirect('/')
+            else:
+                valid = False
     urls = URL.objects.all()
-    return render(request, 'shortener/index.html', {'urls': urls, 'form': form})
+    return render(request, 'shortener/index.html', {'urls': urls, 'form': form, 'valid': valid})
 
 
 def redirect_url(request, shortcode):
