@@ -9,5 +9,5 @@ class URLForm(forms.ModelForm):
         model = URL
         fields = ('url',)
         widgets = {
-            'url': forms.URLInput(attrs={'type':'url', 'class':'form-control', 'placeholder':'Your original url here'})
+            'url': forms.URLInput(attrs={'type':'text', 'class':'form-control', 'placeholder':'Your original url here'})
         }
