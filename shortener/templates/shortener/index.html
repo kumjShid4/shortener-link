@@ -31,7 +31,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="/">
                             <span class="text-muted" style="font-size: 1.375em;">URL Shortener</span>
                         </a>
                     </li>
@@ -69,6 +69,9 @@
                         <div class="row">
                             <div class="col-10">
                                 {% if valid is not True %}
+                                <script>
+                                        document.getElementsByClassName('form-control')[0].className += " is-invalid"
+                                </script>
                                 <div class="invalid-feedback" style="display: block !important;">
                                     Invalid URL for this field.
                                 </div>
@@ -91,7 +94,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for url in urls %}
+                        {% for url in urls_display %}
                         <tr>
                             <th scope="row"><a href="{{ url.url }}" target="_blank">{{ url.url|truncatechars:50 }}</a></th>
                             <td>{{ url.timestamp }}</td>
@@ -101,6 +104,50 @@
                         {% endfor %}
                     </tbody>
                 </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <!-- <div class="pagination">
+                    <span class="step-links">
+                        {% if urls_display.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ urls_display.previous_page_number }}">previous</a>
+                        {% endif %}
+                
+                        <span class="current">
+                            Page {{ urls_display.number }} of {{ urls_display.paginator.num_pages }}.
+                        </span>
+                
+                        {% if urls_display.has_next %}
+                        <a href="?page={{ urls_display.next_page_number }}">next</a>
+                        <a href="?page={{ urls_display.paginator.num_pages }}">last &raquo;</a>
+                        {% endif %}
+                    </span>
+                </div> -->
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        {% if urls_display.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">&laquo; first</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ urls_display.previous_page_number }}">previous</a>
+                        </li>
+                        {% endif %}
+                        <li class="page-item active">
+                            <a class="page-link" href="#">{{ urls_display.number }}<span class="sr-only">(current)</span></a>
+                        </li>
+                        {% if urls_display.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ urls_display.next_page_number }}">next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ urls_display.paginator.num_pages }}">last &raquo;</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>
