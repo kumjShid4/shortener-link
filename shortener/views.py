@@ -28,7 +28,7 @@ def index(request):
                 return redirect('/')
             else:
                 valid = False
-    urls = URL.objects.all()
+    urls = URL.objects.all().order_by('-timestamp')
     paginator = Paginator(urls, 10)
     page = request.GET.get('page')
     urls_display = paginator.get_page(page)

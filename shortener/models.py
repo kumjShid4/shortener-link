@@ -1,6 +1,5 @@
 from django.db import models
 from .utils import code_generator, create_shortcode
-from django_hosts.resolvers import reverse
 # Create your models here.
 
 
@@ -33,6 +32,4 @@ class URL(models.Model):
         super(URL, self).save(*args, **kwargs)
 
     def get_short_url(self):
-        url_path = reverse('redirect_url', kwargs={
-                           'shortcode': self.short_code}, host='www', scheme='http')
-        return url_path
+        return "https://rutgonlink.herokuapp.com/{shortcode}".format(shortcode=self.short_code)
