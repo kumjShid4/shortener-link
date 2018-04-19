@@ -57,8 +57,8 @@ ROOT_URLCONF = 'kumishida.urls'
 ROOT_HOSTCONF = 'kumishida.hosts'
 
 DEFAULT_HOST = 'www'
-DEFAULT_REDIRECT_URL = "http://www.kumishida.com:8000"
-PARENT_HOST = "kumishida.com:8000"
+DEFAULT_REDIRECT_URL = "http://rutgonlink.herokuapp.com"
+PARENT_HOST = "rutgonlink.herokuapp.com"
 
 TEMPLATES = [
     {
