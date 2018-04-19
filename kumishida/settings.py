@@ -36,13 +36,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'shortener',
     #third-party
-    # 'django_hosts',
+    'django_hosts',
     'analytics',
 ]
 
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    # 'django_hosts.middleware.HostsRequestMiddleware',
+    'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,15 +50,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'django_hosts.middleware.HostsRequestMiddleware',
+    'django_hosts.middleware.HostsRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'kumishida.urls'
-# ROOT_HOSTCONF = 'kumishida.hosts'
+ROOT_HOSTCONF = 'kumishida.hosts'
 
-# DEFAULT_HOST = 'www'
-# DEFAULT_REDIRECT_URL = "http://rutgonlink.herokuapp.com"
-# PARENT_HOST = "rutgonlink.herokuapp.com"
+DEFAULT_HOST = 'www'
+DEFAULT_REDIRECT_URL = "http://rutgonlink.herokuapp.com"
+PARENT_HOST = "rutgonlink.herokuapp.com"
 
 TEMPLATES = [
     {
