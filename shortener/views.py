@@ -39,3 +39,9 @@ def redirect_url(request, shortcode):
     url = get_object_or_404(URL, short_code=shortcode)
     ClickCount.objects.create_event(url)
     return redirect(url.url)
+
+def error404(request):
+    return render(request, 'shortener/404.html')
+
+def error500(request):
+    return render(request, 'shortener/500.html')

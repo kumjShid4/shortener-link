@@ -1,0 +1,1 @@
+web: gunicorn kumishida.wsgi --log-file -

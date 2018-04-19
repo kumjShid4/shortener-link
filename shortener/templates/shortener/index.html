@@ -58,9 +58,7 @@
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-10">
-                                {% for field in form.visible_fields %}
-                                    {{ field }}
-                                {% endfor %}
+                                {% for field in form.visible_fields %} {{ field }} {% endfor %}
                             </div>
                             <div class="col-2">
                                 <button type="submit" class="btn btn-outline-light">Shorten URL</button>
@@ -70,7 +68,7 @@
                             <div class="col-10">
                                 {% if valid is not True %}
                                 <script>
-                                        document.getElementsByClassName('form-control')[0].className += " is-invalid"
+                                    document.getElementsByClassName('form-control')[0].className += " is-invalid"
                                 </script>
                                 <div class="invalid-feedback" style="display: block !important;">
                                     Invalid URL for this field.
@@ -96,9 +94,13 @@
                     <tbody>
                         {% for url in urls_display %}
                         <tr>
-                            <th scope="row"><a href="{{ url.url }}" target="_blank">{{ url.url|truncatechars:50 }}</a></th>
+                            <th scope="row">
+                                <a href="{{ url.url }}" target="_blank">{{ url.url|truncatechars:50 }}</a>
+                            </th>
                             <td>{{ url.timestamp }}</td>
-                            <td><a href="{{ url.get_short_url }}" target="_blank">{{ url.get_short_url }}</a></td>
+                            <td>
+                                <a href="{{ url.get_short_url }}" target="_blank">{{ url.get_short_url }}</a>
+                            </td>
                             <td>{{ url.clickcount.count }}</td>
                         </tr>
                         {% endfor %}
@@ -136,7 +138,9 @@
                         </li>
                         {% endif %}
                         <li class="page-item active">
-                            <a class="page-link" href="#">{{ urls_display.number }}<span class="sr-only">(current)</span></a>
+                            <a class="page-link" href="#">{{ urls_display.number }}
+                                <span class="sr-only">(current)</span>
+                            </a>
                         </li>
                         {% if urls_display.has_next %}
                         <li class="page-item">

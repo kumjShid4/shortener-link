@@ -16,10 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
-from shortener.views import redirect_url, index
+from shortener.views import redirect_url, index, error404, error500
+from django.conf.urls import handler404, handler500
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^$', index),
     url(r'^(?P<shortcode>[\w-]+)/$', redirect_url, name='redirect_url'),
 ]
+
+handler404 = error404
+handler500 = error500
