@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
         crossorigin="anonymous">
@@ -38,34 +38,49 @@
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="#" data-toggle="modal" data-target="#modalComingSoon">
                             <span class="text-muted">Login</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="#" data-toggle="modal" data-target="#modalComingSoon">
                             <span class="text-muted">Sign Up</span>
                         </a>
                     </li>
                 </ul>
             </div>
         </nav>
+        <div class="modal fade" id="modalComingSoon" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitle">Unavailable</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Coming soon...
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col pt-4 pb-5 text-white form-shortener">
                 <div class="shortener">
                     <h2 class="font-weight-light">Simplify your links</h2>
                     <form method="POST">
                         {% csrf_token %}
-                        <div class="row">
-                            <div class="col-10">
+                        <div class="form-row">
+                            <div class="form-group col-md-10">
                                 {% for field in form.visible_fields %} {{ field }} {% endfor %}
                             </div>
-                            <div class="col-2">
+                            <div class="form-group col-md-2">
                                 <button type="submit" class="btn btn-outline-light">Shorten URL</button>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-10">
+                            <div class="col">
                                 {% if valid is not True %}
                                 <script>
                                     document.getElementsByClassName('form-control')[0].className += " is-invalid"
@@ -81,8 +96,8 @@
             </div>
         </div>
         <div class="row">
-            <div class="col py-5 text-secondary list-link">
-                <table class="table table-hover talbe-responsive">
+            <div class="table-responsive text-secondary list-link">
+                <table class="table table-hover">
                     <thead class="thead-light">
                         <tr>
                             <th scope="col">Original URL</th>
