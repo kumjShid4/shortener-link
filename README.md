@@ -1,5 +1,5 @@
 # shortener-link
 Shortener link using Python/Django  
-Cloned goo.gl
+Clone goo.gl
 
 Demo at Heroku app https://rutgonlink.herokuapp.com/
