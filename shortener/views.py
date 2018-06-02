@@ -46,7 +46,6 @@ def getClickCount(request, shortcode):
     if request.method == 'GET':
         url = get_object_or_404(URL, short_code=shortcode)
         print(url.clickcount.count)
-        sleep(5)
         return JsonResponse({'clickcount': url.clickcount.count})
     return JsonResponse({'clickcount': -1})
 
