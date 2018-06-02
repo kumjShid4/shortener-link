@@ -32,4 +32,4 @@ class URL(models.Model):
         super(URL, self).save(*args, **kwargs)
 
     def get_short_url(self):
-        return "https://rutgonlink.herokuapp.com/{shortcode}".format(shortcode=self.short_code)
+        return "http://127.0.0.1:8000/{shortcode}".format(shortcode=self.short_code)
