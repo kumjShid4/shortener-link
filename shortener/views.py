@@ -7,8 +7,6 @@ from analytics.models import ClickCount
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http.response import JsonResponse
-from time import sleep
-# Create your views here.
 
 
 def index(request):
@@ -38,17 +36,23 @@ def index(request):
 
 
 def redirect_url(request, shortcode):
-    url = get_object_or_404(URL, short_code=shortcode)
-    ClickCount.objects.create_event(url)
-    return redirect(url.url)
+    try:
+        url = get_object_or_404(URL, short_code=shortcode)
+    except:
+        return render(request, 'shortener/404.html')
+    else:
+        return redirect(url.url)
 
 def getClickCount(request, shortcode):
     if request.method == 'GET':
-        url = get_object_or_404(URL, short_code=shortcode)
-        print(url.clickcount.count)
-        return JsonResponse({'clickcount': url.clickcount.count})
-    return JsonResponse({'clickcount': -1})
-
+        try:
+            url = get_object_or_404(URL, short_code=shortcode)
+        except:
+            return JsonResponse({'clickcount': -1})
+        else:        
+            clickcount = ClickCount.objects.create_event(url)
+            return JsonResponse({'clickcount': clickcount})
+    
 def error404(request):
     return render(request, 'shortener/404.html')
 
