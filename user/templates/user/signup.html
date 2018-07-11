@@ -1,0 +1,66 @@
+{% extends 'shortener/base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col col-sm-4 offset-sm-4">
+        <form id="form" method="POST" action="{% url 'user:signup' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_username">Username</label>
+                <input type="text" class="form-control" name="username" maxlength="150" autofocus required id="id_username" autocomplete="off" aria-describedby="usernameHelp">
+                <small id="usernameHelp" class="form-text text-muted">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small>
+                {% if form.username.errors %}
+                    {% for error in form.username.errors %}
+                        <small class="form-text text-danger">{{error}}</small>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="id_email">Email</label>
+                <input type="email" class="form-control" name="email" maxlength="254" required id="id_email" autocomplete="off" aria-describedby="emailHelp">
+                <small id="emailHelp" class="form-text text-muted">Required. Inform a valid email address.</small>
+                {% if form.email.errors %}
+                    {% for error in form.email.errors %}
+                        <small class="form-text text-danger">{{error}}</small>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="id_password1">Password</label>
+                <input type="password" class="form-control" name="password1" required autocomplete="off" id="id_password1">
+                {% if form.password1.errors %}
+                    {% for error in form.password1.errors %}
+                        <small class="form-text text-danger">{{error}}</small>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="id_password2">Password confirmation</label>
+                <input type="password" class="form-control" name="password2" required autocomplete="off" id="id_password2" aria-describedby="password2Help">
+                <small id="password2Help" class="form-text text-muted">Enter the same password as before, for verification.</small>
+                {% if form.password2.errors %}
+                    {% for error in form.password2.errors %}
+                        <small class="form-text text-danger">{{error}}</small>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-outline-primary" value="submit">Signup</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        $('input').focusin(function() {
+            var helptext = $(this).next();
+            $(helptext).css('display', 'none');
+        })
+
+        $('input').focusout(function() {
+            var helptext = $(this).next();
+            $(helptext).css('display', 'block');
+        })
+    })
+</script>
+{% endblock %}
