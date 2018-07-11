@@ -1,0 +1,126 @@
+{% extends 'shortener/base.html' %}
+{% load staticfiles %}
+{% load qr_code %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static "css/tracking.css" %}">
+{% endblock styles %}
+
+{% block content %}
+<div class="row">
+    <div class="table-responsive text-secondary list-link">
+        <table class="table table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Original URL</th>
+                    <th scope="col">Created</th>
+                    <th scope="col">Short URL</th>
+                    <th scope="col">State</th>
+                    <th scope="col">All Clicks</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for url in urls_display %}
+                <tr id="{{ url.short_code }}">
+                    <td scope="row">
+                        <a href="{{ url.url }}" target="_blank">{{ url.url|truncatechars:50 }}</a>
+                    </td>
+                    <td>{{ url.timestamp }}</td>
+                    <td>
+                        <a onclick="getClickCount(this);" class="{{ url.short_code }}" href="{{ url.get_short_url }}" target="_blank">rutgonlink.herokuapp.com/{{url.short_code}}</a>
+                    </td>
+                    <td>
+                        <a onclick="changeStatus(this);" class="{{ url.short_code }} text-secondary" href="javascript:;">{{ url.status|capfirst }}</a>
+                    </td>
+                    <td>{{ url.clickcount.count }}</td>
+                    <td class="text-right">
+                        <button class="options-button dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">more_vert </i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Analysts Data</a>
+                            <a class="dropdown-item" data-toggle="modal" href="#modalQRCode_{{ url.short_code }}">QR Code</a>
+                            <a class="dropdown-item delete" data-value="{{ url.short_code }}" href="javascript:;">Delete URL</a>
+                        </div>
+                        <div class="modal fade" id="modalQRCode_{{ url.short_code }}" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">QR Code</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <img src="{% qr_url_from_text url.get_short_url size=18 version=4 %}">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <nav>
+            <ul class="pagination justify-content-center">
+                {% if urls_display.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">&laquo;</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ urls_display.previous_page_number }}">previous</a>
+                </li>
+                {% endif %}
+                <li class="page-item active">
+                    <a class="page-link" href="javascript:;">{{ urls_display.number }}
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                {% if urls_display.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ urls_display.paginator.num_pages }}">&raquo;</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+<div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-muted">Delete this link?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger text-center" role="alert">
+                    Your link will be removed and cannot accessed in the future!
+                </div>
+                <p class="h6 text-muted">Short URL</p>
+                <p id="short-url">
+                    <a href="#"></a>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btn-delete">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static "js/script.js" %}"></script>
+{% endblock %}
