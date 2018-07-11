@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'shortener',
     'analytics',
+    'user',
+    'qr_code',
 ]
 
 MIDDLEWARE = [
@@ -120,7 +122,25 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/user/login'
+
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Caches.
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    },
+    'qr-code': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'qr-code-cache',
+        'TIMEOUT': 3600
+    }
+}
+
+# Django QR Code specific options.
+QR_CODE_CACHE_ALIAS = 'qr-code'
