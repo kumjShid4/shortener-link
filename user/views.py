@@ -21,8 +21,9 @@ def signup(request):
                 newUser = form.save()
                 authenticated_user = authenticate(username=newUser.username, password=request.POST.get('password1'))
                 login(request, authenticated_user)
+                return redirect('/')
         return render(request, 'user/signup.html', {'form': form})
-    else:
+    else:   
         return redirect('/')
 
 def login_view(request):
