@@ -1,6 +1,6 @@
 from django.db import models
 from .utils import code_generator, create_shortcode
-# Create your models here.
+from django.contrib.auth.models import User
 
 
 class URLManager(models.Manager):
@@ -15,12 +15,17 @@ class URLManager(models.Manager):
 
 
 class URL(models.Model):
+    STATUS_CHOICE = (
+        ('public', 'Public'),
+        ('private', 'Private'),
+    )
     url = models.CharField(max_length=220)
     short_code = models.CharField(
         max_length=15, unique=True, null=False, blank=True)
-
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICE, default='public')
+    user = models.ForeignKey(User, related_name='user', blank=True, null=True, on_delete=models.CASCADE)
     objects = URLManager()
 
     def __str__(self):
@@ -32,4 +37,4 @@ class URL(models.Model):
         super(URL, self).save(*args, **kwargs)
 
     def get_short_url(self):
-        return "http://127.0.0.1:8000/{shortcode}".format(shortcode=self.short_code)
+        return "http://rutgonlink.herokuapp.com/{shortcode}".format(shortcode=self.short_code)
