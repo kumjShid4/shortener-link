@@ -1,13 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-from .forms import URLForm
-from .models import URL
-from .utils import validate_url
-from analytics.models import ClickCount
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http.response import JsonResponse
-
+from django.contrib.auth.decorators import login_required
+from analytics.models import ClickCount
+from .forms import URLForm
+from .models import URL
+from .utils import validate_url
 
 def index(request):
     valid = True
@@ -23,17 +22,19 @@ def index(request):
             if form.is_valid():
                 obj = URL()
                 obj.url = form.cleaned_data['url']
+                #if user is logged in
+                if request.user.id:
+                    obj.user = request.user
                 obj.save()
                 ClickCount.objects.create_event(obj)
                 return redirect('/')
             else:
                 valid = False
-    urls = URL.objects.all().order_by('-timestamp')
+    urls = URL.objects.all().filter(status__exact='public').order_by('-timestamp')
     paginator = Paginator(urls, 10)
     page = request.GET.get('page')
     urls_display = paginator.get_page(page)
-    return render(request, 'shortener/index.html', {'urls': urls, 'form': form, 'valid': valid, 'urls_display': urls_display})
-
+    return render(request, 'shortener/index.html', {'form': form, 'valid': valid, 'urls_display': urls_display})
 
 def redirect_url(request, shortcode):
     try:
@@ -41,9 +42,13 @@ def redirect_url(request, shortcode):
     except:
         return render(request, 'shortener/404.html')
     else:
-        return redirect(url.url)
+        ClickCount.objects.create_event(url)
+        trueurl = url.url
+        if trueurl.find('http') == -1:
+            trueurl = 'https://' + trueurl
+        return redirect(trueurl)
 
-def getClickCount(request, shortcode):
+def get_click_count(request, shortcode):
     if request.method == 'GET':
         try:
             url = get_object_or_404(URL, short_code=shortcode)
@@ -58,3 +63,20 @@ def error404(request):
 
 def error500(request):
     return render(request, 'shortener/500.html')
+
+@login_required
+def change_status(request, shortcode):
+    try:
+        url = get_object_or_404(URL, short_code=shortcode)
+    except:
+        return JsonResponse({'status': 'undefined'})
+    else:
+        if request.user.is_authenticated:
+            if url.status == 'public':
+                url.status = 'private'
+            else:
+                url.status = 'public'
+            url.save()
+            return JsonResponse({'status': url.status})
+        else:
+            return JsonResponse({'status': url.status})
