@@ -1,3 +1,11 @@
+*{
+    box-sizing: border-box;    
+}
+
+html, body {
+    font-family: 'Roboto Condensed', sans-serif
+}
+
 .shortener, .list-link {
     margin-left: 7.5em;
     margin-right: 7.5em;
@@ -5,4 +13,18 @@
 
 .form-shortener {
     background-color: #366ed1;
+}
+
+.btn:focus, button:focus {
+    outline: 0;
+    box-shadow: none;
+}
+
+div.dropdown-menu {
+    width: auto;
+    height: auto;
+    font-size: 0.875rem;
+    margin: 0;
+    padding: 0;
+    min-width: 124px;
 }
