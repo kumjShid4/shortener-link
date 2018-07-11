@@ -15,16 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.conf.urls import url, include
-from shortener.views import redirect_url, index, error404, error500
-from django.conf.urls import handler404, handler500
+from django.conf.urls import url, include, handler404, handler500
+from shortener import views
+from qr_code import urls as qr_code_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^$', index),
-    url(r'^(?P<shortcode>[\w-]+)/$', redirect_url, name='redirect_url'),
+    url(r'^$', views.index),
+    url(r'^(?P<shortcode>[\w-]+)/$', views.redirect_url, name='redirect_url'),
     url(r'^shortener/', include('shortener.urls')),
+    url(r'^user/', include('user.urls')),
+    url(r'^qr_code/', include(qr_code_urls, namespace="qr_code")),
 ]
 
-handler404 = error404
-handler500 = error500
+handler404 = views.error404
+handler500 = views.error500
