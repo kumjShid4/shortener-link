@@ -31,7 +31,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row mt-3">
     <div class="table-responsive text-secondary list-link">
         <table class="table table-hover">
             <thead class="thead-light">
@@ -45,12 +45,12 @@
             <tbody>
                 {% for url in urls_display %}
                 <tr>
-                    <th scope="row">
+                    <td scope="row">
                         <a href="{{ url.url }}" target="_blank">{{ url.url|truncatechars:50 }}</a>
-                    </th>
+                    </td>
                     <td>{{ url.timestamp }}</td>
                     <td>
-                        <a onclick="getClickCount(this);" class="shortlink" href="{{ url.get_short_url }}" target="_blank">rutgonlink.herokuapp.com/{{url.short_code}}</a>
+                        <a onclick="getClickCount(this);" class="{{ url.short_code }}" href="{{ url.get_short_url }}" target="_blank">rutgonlink.herokuapp.com/{{url.short_code}}</a>
                     </td>
                     <td class="{{ url.short_code }}">{{ url.clickcount.count }}</td>
                 </tr>
@@ -67,19 +67,13 @@
                 <li class="page-item">
                     <a class="page-link" href="?page=1">&laquo;</a>
                 </li>
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ urls_display.previous_page_number }}">previous</a>
-                </li>
                 {% endif %}
                 <li class="page-item active">
-                    <a class="page-link" href="#">{{ urls_display.number }}
+                    <a class="page-link" href="javascript:;">{{ urls_display.number }}
                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
                 {% if urls_display.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ urls_display.next_page_number }}">next</a>
-                </li>
                 <li class="page-item">
                     <a class="page-link" href="?page={{ urls_display.paginator.num_pages }}">&raquo;</a>
                 </li>
@@ -93,14 +87,11 @@
 {% block scripts %}
 <script>
     function getClickCount(e){
-        var clickcount_element = e.parentElement.parentElement.getElementsByTagName('td')[2];
-        var shortcode = clickcount_element.className;
         $.ajax({
             method: 'GET',
-            url: '/shortener/' + shortcode,
+            url: '/shortener/' + e.className,
             success: (data) => {
-                console.log(data['clickcount']);
-                clickcount_element.innerHTML = data['clickcount'];
+                e.parentElement.parentElement.getElementsByTagName('td')[3].innerHTML = data['clickcount'];
             },
             error: (error) => {
                 console.log(error);
